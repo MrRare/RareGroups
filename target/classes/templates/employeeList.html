@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Member List</title>
+	<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- Employee Table -->
+<table border="2" align="center">
+	<thead>
+	<tr>
+		<th>Employee Name</th>
+		<th>Employee Address</th>
+		<th>Employee Email</th>
+		<th>Registration No</th>
+		<th>Score</th>
+		<th>Education</th>
+		<th>Bio</th>
+		<th>Send Email</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="e : ${employees}">
+		<td th:text="${e.emp_name}"></td>
+		<td th:text="${e.emp_address}"></td>
+		<td th:text="${e.emp_email}"></td>
+		<td th:text="${e.registrationNo}"></td>
+		<td th:text="${e.score}"></td>
+		<td th:text="${e.education}"></td>
+		<td th:text="${e.bio}"></td>
+		<td>
+			<a th:href="@{/sendMail/{employee_id}(employee_id=${e.emp_id})}">Send Email</a>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+<!-- Search Box -->
+<div align="center">
+	<form action="#" th:action="@{/search}" method="get">
+		<input type="text" name="query" placeholder="Enter command, e.g., 'send hey to all Bhopal employees'">
+		<button type="submit">Search</button>
+	</form>
+</div>
+
+<!-- Search Results -->
+<div align="center" th:if="${employees}">
+	<h3>Search Results</h3>
+	<table border="2">
+		<thead>
+		<tr>
+			<th>Employee Name</th>
+			<th>Employee Address</th>
+			<th>Employee Email</th>
+			<th>Registration No</th>
+			<th>Score</th>
+			<th>Education</th>
+			<th>Bio</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="e : ${employees}">
+			<td th:text="${e.emp_name}"></td>
+			<td th:text="${e.emp_address}"></td>
+			<td th:text="${e.emp_email}"></td>
+			<td th:text="${e.registrationNo}"></td>
+			<td th:text="${e.score}"></td>
+			<td th:text="${e.education}"></td>
+			<td th:text="${e.bio}"></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<!-- Text Area for Custom Message -->
+	<!-- Bulk Email Form -->
+	<form action="#" th:action="@{/sendBulkMail}" method="post">
+		<h4>Send Custom Message to Employees:</h4>
+		<textarea name="customMessage" rows="5" cols="50" placeholder="Enter your message here"></textarea><br><br>
+
+		<!-- Checkboxes for selecting employees with default checked -->
+		<div th:each="employee : ${employees}">
+			<input type="checkbox" name="employeeIds" th:value="${employee.emp_id}" th:checked="true" />
+			<span th:text="${employee.emp_name}"></span><br>
+		</div>
+
+		<button type="submit">Send Email to Selected Employees</button>
+	</form>
+
+
+</div>
+
+</body>
+</html>
